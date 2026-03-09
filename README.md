@@ -397,9 +397,8 @@ MIT License - veja o arquivo LICENSE para detalhes.
 
 ## 🐛 Reportar Problemas
 
-Use a [seção de issues](https://github.com/seu-usuario/fazenda-hidroponica/issues) para reportar bugs ou sugerir novas features.
+Use a [seção de issues] para reportar bugs ou sugerir novas features.
 
 ---
 
-**Desenvolvido com ❤️ para a agricultura sustentável do futuro!** �#   s e l e n e _ b a c k e n d  
- 
+**Desenvolvido com ❤️ para a agricultura sustentável do futuro!** 
