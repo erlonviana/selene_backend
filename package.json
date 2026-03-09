@@ -1,0 +1,44 @@
+{
+  "name": "selene-backend",
+  "version": "1.0.0",
+  "description": "API Selene - Sistema de monitoramento com ESP32",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "db:init": "node scripts/init-db.js",
+    "db:reset": "node scripts/reset-db.js",
+    "admin:create": "node scripts/criar-admin-padrao.js",
+    "test:api": "node scripts/test-api.js",
+    "test:full": "npm run db:reset && npm run dev & sleep 3 && npm run test:api",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "iot",
+    "monitoring",
+    "esp32",
+    "sensors",
+    "sequelize",
+    "nodejs"
+  ],
+  "author": "Seu Nome",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0",
+    "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.2.4",
+    "multer": "^2.0.2",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "axios": "^1.6.0",
+    "nodemon": "^2.0.0",
+    "sequelize-cli": "^6.6.5"
+  }
+}

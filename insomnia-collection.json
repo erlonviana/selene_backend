@@ -1,0 +1,336 @@
+  {
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-01-15T10:30:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "env_global",
+      "_type": "environment",
+      "data": {
+        "base_url": "http://localhost:3000/api/v1"
+      },
+      "name": "Global Environment",
+      "parentId": "wrk_123"
+    },
+    {
+      "_id": "wrk_123",
+      "_type": "workspace",
+      "created": 1705311000000,
+      "description": "Fazenda Hidropônica API",
+      "modified": 1705311000000,
+      "name": "Fazenda Hidropônica",
+      "parentId": null,
+      "scope": "collection"
+    },
+    {
+      "_id": "req_register",
+      "_type": "request",
+      "authentication": {},
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "id": "pair_1",
+            "name": "nome_completo",
+            "value": "João Silva"
+          },
+          {
+            "id": "pair_2",
+            "name": "email",
+            "value": "joao@email.com"
+          },
+          {
+            "id": "pair_3",
+            "name": "senha", 
+            "value": "senha123"
+          },
+          {
+            "id": "pair_4",
+            "name": "telefone",
+            "value": "(11) 99999-9999"
+          },
+          {
+            "id": "pair_5",
+            "name": "endereco",
+            "value": "Rua das Flores, 123"
+          },
+          {
+            "id": "pair_6",
+            "name": "data_nascimento",
+            "value": "1990-01-01"
+          }
+        ]
+      },
+      "created": 1705311000000,
+      "description": "Registrar novo usuário",
+      "headers": [],
+      "metaSortKey": -1705311000000,
+      "method": "POST",
+      "modified": 1705311000000,
+      "name": "1. Registrar Usuário",
+      "parentId": "fld_auth",
+      "url": "{{ base_url }}/auth/registrar",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_login",
+      "_type": "request",
+      "authentication": {},
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"joao@email.com\",\n  \"senha\": \"senha123\"\n}"
+      },
+      "created": 1705311000000,
+      "description": "Fazer login para obter token JWT",
+      "headers": [
+        {
+          "id": "pair_1",
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": -1705311000001,
+      "method": "POST",
+      "modified": 1705311000000,
+      "name": "2. Login",
+      "parentId": "fld_auth",
+      "url": "{{ base_url }}/auth/login",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_profile",
+      "_type": "request",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ token }}"
+      },
+      "body": {},
+      "created": 1705311000000,
+      "description": "Obter perfil do usuário autenticado",
+      "headers": [],
+      "metaSortKey": -1705311000002,
+      "method": "GET",
+      "modified": 1705311000000,
+      "name": "3. Perfil do Usuário",
+      "parentId": "fld_auth",
+      "url": "{{ base_url }}/auth/perfil",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_health",
+      "_type": "request",
+      "authentication": {},
+      "body": {},
+      "created": 1705311000000,
+      "description": "Health check da API",
+      "headers": [],
+      "metaSortKey": -1705311000003,
+      "method": "GET",
+      "modified": 1705311000000,
+      "name": "Health Check",
+      "parentId": "fld_utils",
+      "url": "{{ base_url }}/health",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_test_db",
+      "_type": "request",
+      "authentication": {},
+      "body": {},
+      "created": 1705311000000,
+      "description": "Testar conexão com MongoDB",
+      "headers": [],
+      "metaSortKey": -1705311000004,
+      "method": "GET",
+      "modified": 1705311000000,
+      "name": "Teste MongoDB",
+      "parentId": "fld_utils",
+      "url": "{{ base_url }}/test-db",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_sensores",
+      "_type": "request",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ token }}"
+      },
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"mac\": \"24:6F:28:8A:1B:C2\",\n  \"temp\": 24.5,\n  \"umid\": 65.2,\n  \"lux\": 1250,\n  \"ph\": 6.1,\n  \"cond\": 1450.5,\n  \"nivel\": 1,\n  \"bat\": 85.5,\n  \"rssi\": -65\n}"
+      },
+      "created": 1705311000000,
+      "description": "Enviar dados de sensores do ESP32",
+      "headers": [
+        {
+          "id": "pair_1",
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": -1705311000005,
+      "method": "POST",
+      "modified": 1705311000000,
+      "name": "ESP32 - Enviar Sensores",
+      "parentId": "fld_esp32",
+      "url": "{{ base_url }}/leituras/sensores",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_camera",
+      "_type": "request",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ token }}"
+      },
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"mac\": \"24:6F:28:8A:1B:C3\",\n  \"altura_planta\": 15.3,\n  \"foto_path\": \"fotos/cogumelos/2024-01-15_10-30-45.jpg\"\n}"
+      },
+      "created": 1705311000000,
+      "description": "Enviar dados da câmera ESP32-CAM",
+      "headers": [
+        {
+          "id": "pair_1",
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": -1705311000006,
+      "method": "POST",
+      "modified": 1705311000000,
+      "name": "ESP32-CAM - Enviar Foto",
+      "parentId": "fld_esp32",
+      "url": "{{ base_url }}/leituras/camera",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_dashboard",
+      "_type": "request",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ token }}"
+      },
+      "body": {},
+      "created": 1705311000000,
+      "description": "Acessar dashboard principal",
+      "headers": [],
+      "metaSortKey": -1705311000007,
+      "method": "GET",
+      "modified": 1705311000000,
+      "name": "Dashboard Principal",
+      "parentId": "fld_dashboard",
+      "url": "{{ base_url }}/dashboard/principal",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_dispositivos",
+      "_type": "request",
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ token }}"
+      },
+      "body": {},
+      "created": 1705311000000,
+      "description": "Listar dispositivos do usuário",
+      "headers": [],
+      "metaSortKey": -1705311000008,
+      "method": "GET",
+      "modified": 1705311000000,
+      "name": "Listar Dispositivos",
+      "parentId": "fld_dashboard",
+      "url": "{{ base_url }}/dispositivos",
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingSendCookies": true,
+      "settingStoreCookies": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "fld_auth",
+      "_type": "request_group",
+      "created": 1705311000000,
+      "description": "Endpoints de autenticação",
+      "environment": {},
+      "metaSortKey": -1705311000009,
+      "modified": 1705311000000,
+      "name": "🔐 Autenticação",
+      "parentId": "wrk_123"
+    },
+    {
+      "_id": "fld_esp32",
+      "_type": "request_group",
+      "created": 1705311000000,
+      "description": "Endpoints para ESP32",
+      "environment": {},
+      "metaSortKey": -1705311000010,
+      "modified": 1705311000000,
+      "name": "📡 ESP32",
+      "parentId": "wrk_123"
+    },
+    {
+      "_id": "fld_dashboard",
+      "_type": "request_group",
+      "created": 1705311000000,
+      "description": "Endpoints de dashboard",
+      "environment": {},
+      "metaSortKey": -1705311000011,
+      "modified": 1705311000000,
+      "name": "📊 Dashboard",
+      "parentId": "wrk_123"
+    },
+    {
+      "_id": "fld_utils",
+      "_type": "request_group",
+      "created": 1705311000000,
+      "description": "Utilitários",
+      "environment": {},
+      "metaSortKey": -1705311000012,
+      "modified": 1705311000000,
+      "name": "🛠️ Utilitários",
+      "parentId": "wrk_123"
+    }
+  ]
+}
