@@ -5,15 +5,23 @@ class DispositivoController {
   static async listar(req, res) {
     try {
       const usuarioId = req.userId;
+      const { incluir_inativos } = req.query; // Parâmetro opcional para incluir dispositivos inativos
       
-      const dispositivos = await Dispositivo.find({ usuario: usuarioId })
+      // Por padrão, mostra apenas ativos. Se incluir_inativos=true, mostra todos
+      const filtro = { usuario: usuarioId };
+      if (incluir_inativos !== 'true') {
+        filtro.ativo = true;
+      }
+      
+      const dispositivos = await Dispositivo.find(filtro)
         .populate('planta', 'especie status')
         .sort({ nome: 1 });
       
       res.json({
         success: true,
         data: dispositivos,
-        total: dispositivos.length
+        total: dispositivos.length,
+        filtro_aplicado: incluir_inativos === 'true' ? 'todos' : 'apenas_ativos'
       });
       
     } catch (error) {
@@ -218,6 +226,52 @@ class DispositivoController {
       
     } catch (error) {
       console.error('Erro ao atualizar status:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Erro interno do servidor'
+      });
+    }
+  }
+
+  // Ativar/Desativar dispositivo
+  static async alterarStatusDispositivo(req, res) {
+    try {
+      const { id } = req.params;
+      const usuarioId = req.userId;
+      const { ativo } = req.body;
+
+      // Verificar se dispositivo pertence ao usuário
+      const dispositivo = await Dispositivo.findOne({
+        _id: id,
+        usuario: usuarioId
+      });
+
+      if (!dispositivo) {
+        return res.status(404).json({
+          success: false,
+          message: 'Dispositivo não encontrado'
+        });
+      }
+
+      // Atualizar status ativo
+      const statusAnterior = dispositivo.ativo;
+      dispositivo.ativo = ativo === true ? true : false;
+      await dispositivo.save();
+
+      res.json({
+        success: true,
+        message: `Dispositivo ${dispositivo.ativo ? 'ativado' : 'desativado'} com sucesso`,
+        data: {
+          id: dispositivo._id,
+          nome: dispositivo.nome,
+          mac_address: dispositivo.mac_address,
+          ativo: dispositivo.ativo,
+          status_anterior: statusAnterior
+        }
+      });
+
+    } catch (error) {
+      console.error('Erro ao alterar status do dispositivo:', error);
       res.status(500).json({
         success: false,
         message: 'Erro interno do servidor'

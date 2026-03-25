@@ -369,6 +369,9 @@ console.log(data);
 ---
 
 ## 👨‍💼 Rotas de Administração (Admin)
+*Criar admin padrão
+npm run admin:create
+
 
 ### POST /api/v1/admin/login
 Login de administrador

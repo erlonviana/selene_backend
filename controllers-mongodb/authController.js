@@ -181,6 +181,58 @@ class AuthController {
     }
   }
 
+  static async recuperarSenha(req, res) {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email é obrigatório para recuperação de senha'
+        });
+      }
+
+      const usuario = await User.findOne({ email: email.toLowerCase() });
+      if (!usuario) {
+        return res.status(404).json({
+          success: false,
+          message: 'Usuário não encontrado'
+        });
+      }
+
+      if (!usuario.ativo) {
+        return res.status(403).json({
+          success: false,
+          message: 'Usuário desativado não pode recuperar senha'
+        });
+      }
+
+      // Gerar senha temporária (e insegura por pedido expressamente expor no e-mail)
+      const novaSenha = Math.random().toString(36).slice(-8) + 'A1!';
+      usuario.senha = novaSenha;
+      await usuario.save();
+
+      // Aqui você deve enviar e-mail de verdade (ex: nodemailer) com novaSenha.
+      // Para efeito de teste, logamos a mensagem no console.
+      console.log(`Recuperação de senha para ${usuario.email}: nova senha = ${novaSenha}`);
+
+      res.json({
+        success: true,
+        message: 'E-mail de recuperação enviado com sucesso (simulado)',
+        data: {
+          email: usuario.email,
+          nova_senha: novaSenha
+        }
+      });
+    } catch (error) {
+      console.error('Erro na recuperação de senha:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Erro interno do servidor'
+      });
+    }
+  }
+
   static async atualizarPerfil(req, res) {
     try {
       const { nome_completo, telefone, endereco, data_nascimento } = req.body;
@@ -199,7 +251,7 @@ class AuthController {
       usuario.data_nascimento = data_nascimento || usuario.data_nascimento;
       
       if (req.file) {
-        usuario.foto_perfil = `/fotos_usuarios/${req.file.filename}`;
+        usuario.foto_perfil = `/fotos_perfil/${req.file.filename}`;
       }
 
       await usuario.save();
@@ -226,13 +278,66 @@ class AuthController {
     }
   }
 
+  // Desativar/Ativar usuário (apenas admin)
+  static async alterarStatusUsuario(req, res) {
+    try {
+      const { userId } = req.params;
+      const { ativo } = req.body;
+
+      // Validar se o ID é válido
+      if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
+        return res.status(400).json({
+          success: false,
+          message: 'ID de usuário inválido'
+        });
+      }
+
+      // Buscar usuário
+      const usuario = await User.findById(userId);
+      if (!usuario) {
+        return res.status(404).json({
+          success: false,
+          message: 'Usuário não encontrado'
+        });
+      }
+
+      // Atualizar status
+      const statusAnterior = usuario.ativo;
+      usuario.ativo = ativo === true ? true : false;
+      await usuario.save();
+
+      res.json({
+        success: true,
+        message: `Usuário ${usuario.ativo ? 'ativado' : 'desativado'} com sucesso`,
+        data: {
+          id: usuario._id,
+          nome_completo: usuario.nome_completo,
+          email: usuario.email,
+          ativo: usuario.ativo,
+          status_anterior: statusAnterior
+        }
+      });
+
+    } catch (error) {
+      console.error('Erro ao alterar status do usuário:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Erro interno do servidor'
+      });
+    }
+  }
+
   static uploadFoto() {
     const multer = require('multer');
     const path = require('path');
     
     const storage = multer.diskStorage({
       destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '..', '..', 'fotos_usuarios'));
+        const uploadPath = path.join(__dirname, '..', '..', 'fotos_perfil');
+        if (!fs.existsSync(uploadPath)) {
+          fs.mkdirSync(uploadPath, { recursive: true });
+        }
+        cb(null, uploadPath);
       },
       filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);

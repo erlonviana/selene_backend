@@ -13,9 +13,12 @@ router.get('/:id', authMiddleware, DispositivoController.buscar);
 router.post('/', authMiddleware, DispositivoController.criar);
 
 // PUT /api/v1/dispositivos/:id - Atualizar dispositivo
-router.put('/:id', DispositivoController.atualizar);
+router.put('/:id', authMiddleware, DispositivoController.atualizar);
 
 // PATCH /api/v1/dispositivos/:id/status - Atualizar status online/offline
-router.patch('/:id/status', DispositivoController.atualizarStatus);
+router.patch('/:id/status', authMiddleware, DispositivoController.atualizarStatus);
+
+// PUT /api/v1/dispositivos/:id/ativo - Ativar/Desativar dispositivo
+router.put('/:id/ativo', authMiddleware, DispositivoController.alterarStatusDispositivo);
 
 module.exports = router;

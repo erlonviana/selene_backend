@@ -30,6 +30,10 @@ const dispositivoSchema = new mongoose.Schema({
     ref: 'User',
     required: [true, 'Usuário é obrigatório']
   },
+  ativo: {
+    type: Boolean,
+    default: true
+  },
   online: {
     type: Boolean,
     default: true
