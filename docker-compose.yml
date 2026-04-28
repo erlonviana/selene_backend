@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: minha-api
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    volumes:
+      - ./database.sqlite:/app/database.sqlite
+      - ./fotos_plantas:/app/fotos_plantas
+
+  mongo:
+    image: mongo
+    container_name: meu-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
